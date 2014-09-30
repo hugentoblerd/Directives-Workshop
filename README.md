@@ -6,7 +6,7 @@ These components allow us to reuse code within our project, and throughout other
 
 
 
-#The Anatomy of an Angular Directive - a reference.
+<!-- #The Anatomy of an Angular Directive - a reference.
 ````javascript
 	var app = angular.module('NAME-OF-APP', []);
 
@@ -44,105 +44,106 @@ These components allow us to reuse code within our project, and throughout other
 		}
 
 	})
-````
+```` -->
 
-###Note:
-Most of these attributes within the directive example above are optional. For more information about directives visit the documentation at: https://docs.angularjs.org/guide/directive
+<!-- ###Note: -->
+<!-- Most of these attributes within the directive example above are optional.  -->
+For more information about directives visit the documentation at: https://docs.angularjs.org/guide/directive
 
 
-###Walkthrough
-If you dig through the angular documentation and as you become more familiar with directives you will notice that angular is heavily dependent in its use of directives. A few example directives that you use all the time even if you weren't aware of it are: 
+<!-- ###Walkthrough -->
+<!-- If you dig through the angular documentation and as you become more familiar with directives you will notice that angular is heavily dependent in its use of directives. A few example directives that you use all the time even if you weren't aware of it are:  -->
 
-+ ng-app
-+ ng-view
-+ ng-repeat
-+ ng-click
-+ ect...
+<!-- + ng-app -->
+<!-- + ng-view -->
+<!-- + ng-repeat -->
+<!-- + ng-click -->
+<!-- + etc... -->
 
 ####Step 1
 
 We are now going to embrace the modularity of angular and create our first reusable module. This means that the custom directive that you write here will be easy to reuse in all of your projects by simply injecting your module into your apps dependencies. To get started lets create a new project and setup our angular module. 
 
-<i>myDirectives.js</i>
-
-  var app = angular.module('myDirectives', []);
+<!-- <i>myDirectives.js</i> -->
+<!--  -->
+  <!-- var app = angular.module('myDirectives', []); -->
   
-You are familiar with creating controllers, factories, and services already and the markup for starting a directive looks very similar. 
-````javascript
-  app.directive('camelCase', function(){
-    //directive stuff here...
-  });
-````
+<!-- You are familiar with creating controllers, factories, and services already and the markup for starting a directive looks very similar.  -->
+<!-- ````javascript -->
+  <!-- app.directive('camelCase', function(){ -->
+    <!-- //directive stuff here... -->
+  <!-- }); -->
+<!-- ```` -->
 
-####Dont get tripped up.
-Despite looking just like a controller or a service there are a few things to be cautious of when working with directives. The first is naming conventions. Remember that Javascript conventions say we should use camelCase while HTML conventions state that we should use snake-case. Angular trying to keep with best practices holds true to these conventions so whatever you name your directive here will later be called in your HTML using snake-case
+<!-- ####Dont get tripped up. -->
+<!-- Despite looking just like a controller or a service there are a few things to be cautious of when working with directives. The first is naming conventions. Remember that Javascript conventions say we should use camelCase while HTML conventions state that we should use snake-case. Angular trying to keep with best practices holds true to these conventions so whatever you name your directive here will later be called in your HTML using snake-case -->
 
-````html
-  ex. <div camel-case></div>
-  ex. <div ng-view></div>
-````
+<!-- ````html -->
+  <!-- ex. <div camel-case></div> -->
+  <!-- ex. <div ng-view></div> -->
+<!-- ```` -->
 
-Angular handles the conversion of your naming process itself so you don't have to worry about it, however if you didn't know it was happening you might have a very hard time debugging your code.  
+<!-- Angular handles the conversion of your naming process itself so you don't have to worry about it, however if you didn't know it was happening you might have a very hard time debugging your code.   -->
 
 ###Step 2
 
 ####Create "pending" Directive
 Now that we have created our basic setup lets focus on building a directive that we can put on a <button></button> element that will show a loading gif while we wait for our data from an $http request. Lets create a new directive on our app and lets give it the name 'pending'. We then will setup the basic anatomy of a directive.
 
-````javascript
-  return {
-    restrict: 'AE',
-    scope: {},
-    link: function(){
-      //Code Here
-    }
-  }
-````
+<!-- ````javascript -->
+  <!-- return { -->
+    <!-- restrict: 'AE', -->
+    <!-- scope: {}, -->
+    <!-- link: function(){ -->
+      <!-- //Code Here -->
+    <!-- } -->
+  <!-- } -->
+<!-- ```` -->
 
-Notice a directive is a really a function that is returning an object, and on this object we are adding some very specific keys that are specific to directives, we just need to take advantage of them. Thinking about our needs in creating a spinner we are going to restrict our directive to an attribute.
+<!-- Notice a directive is a really a function that is returning an object, and on this object we are adding some very specific keys that are specific to directives, we just need to take advantage of them. Thinking about our needs in creating a spinner we are going to restrict our directive to an attribute. -->
 
-We are also going to use isolate scope to ensure that our code is modular. However, we are going to want our directive to have access to the controller that it is used in. For example if we look at this example where we are sending a request to iTunes and returning an array of songs we are going to want to still call the function `getSongs()` when this button is clicked. To do this we need to pass in some keys to our scope object.
+<!-- We are also going to use isolate scope to ensure that our code is modular. However, we are going to want our directive to have access to the controller that it is used in. For example if we look at this example where we are sending a request to iTunes and returning an array of songs we are going to want to still call the function `getSongs()` when this button is clicked. To do this we need to pass in some keys to our scope object. -->
 
-````html
-	<button class="btn btn-primary" ng-click="getSongData()"> Submit </button>
-````
+<!-- ````html -->
+	<!-- <button class="btn btn-primary" ng-click="getData()"> Submit </button> -->
+<!-- ```` -->
 
-What we need is a way to grab the function that is being called with ng-click. We will do this by setting up a key in our scope object called request: Now because we are wanting to run the function directly as it is called from our controller we are going to set request: '&' in our scope. The ampersand may look funny, but we are letting angular handle the complexities of going to the $parent scope and getting the function that we want to call. Now we will modify our html a bit to handle this change.
+<!-- What we need is a way to grab the function that is being called with ng-click. We will do this by setting up a key in our scope object called request: Now because we are wanting to run the function directly as it is called from our controller we are going to set request: '&' in our scope. The ampersand may look funny, but we are letting angular handle the complexities of going to the $parent scope and getting the function that we want to call. Now we will modify our html a bit to handle this change. -->
 
-````html
-	<button class="btn btn-primary" pending request="getSongData()"> Submit </button>
-````
+<!-- ````html -->
+	<!-- <button class="btn btn-primary" pending request="getData()"> Submit </button> -->
+<!-- ```` -->
 
-Notice that we have removed ng-click because it is no longer necessary as we will be calling the getSongData() from the directive's scope key request. 
+<!-- Notice that we have removed ng-click because it is no longer necessary as we will be calling the getSongData() from the directive's scope key request.  -->
 
-Now go ahead and setup the link block. This link block is very important when it comes to creating useful directives. It is through the link function that we ge access to three very important things the first is scope. 
+<!-- Now go ahead and setup the link block. This link block is very important when it comes to creating useful directives. It is through the link function that we get access to three very important things the first is scope.  -->
 
-#####A note about scope
-When we talk about scope we are often referring to what block of code we are currently residing in and it is through scope that we have access to our variables and functions. What is important to understand when working with directives is that we often want to make sure we have an isolated scope so we know that our directive can be modular and not dependent upon a function or variable inside of a parent scope. The directive needs to hold all of its own functionality. This concept is not to be confused with being unable to use or take in functions or variables from a controller or parent scope and manipulate them. Think about ng-repeat="item in list". ng-repeat is a directive that is taking in a $scope variable called list and iterating through each item in that array therefore it must have access to the controller where $scope.list is defined. 
+<!-- #####A note about scope -->
+<!-- When we talk about scope we are often referring to what block of code we are currently residing in and it is through scope that we have access to our variables and functions. What is important to understand when working with directives is that we often want to make sure we have an isolated scope so we know that our directive can be modular and not dependent upon a function or variable inside of a parent scope. The directive needs to hold all of its own functionality. This concept is not to be confused with being unable to use or take in functions or variables from a controller or parent scope and manipulate them. Think about ng-repeat="item in list". ng-repeat is a directive that is taking in a $scope variable called list and iterating through each item in that array therefore it must have access to the controller where $scope.list is defined.  -->
 
-Using scope appropriately and understanding how far down a scope tree you are can be confusing and difficult so it is okay to struggle with this concept. 
+<!-- Using scope appropriately and understanding how far down a scope tree you are can be confusing and difficult so it is okay to struggle with this concept.  -->
 
-Next we pass in element, or elem. This is the actual DOM element where we added our attribute pending. It is through the element that we can perform DOM manipulation in a way that might look and feel familiar to JQuery. The last thing we pass in will be attributes or attr/attrs. This gives us access to the attributes that are on the element.
+<!-- Next we pass in element, or elem. This is the actual DOM element where we added our attribute pending. It is through the element that we can perform DOM manipulation in a way that might look and feel familiar to JQuery. The last thing we pass in will be attributes or attr/attrs. This gives us access to the attributes that are on the element. -->
 
-````javascript
-	link: function(scope, elem, attrs){
-	
-	}
-````
-Inside our link block we can write the code necessary to show our pending spinner while we are fetching data from our server. Try console.log(scope, elem, attrs) to get a good look at the things you have available to you. There are many ways to accomplish this next task so play with a few things to try and get it right. 
+<!-- ````javascript -->
+	<!-- link: function(scope, elem, attrs){ -->
+	<!--  -->
+	<!-- } -->
+<!-- ```` -->
+<!-- Inside our link block we can write the code necessary to show our pending spinner while we are fetching data from our server. Try console.log(scope, elem, attrs) to get a good look at the things you have available to you. There are many ways to accomplish this next task so play with a few things to try and get it right.  -->
 
 ####Steps to complete the "pending" directive
 
-+ Hide, disable, or change the text of the submit button
-+ Show a spinning icon or gif while we wait for our data
-+ Hide the spinner when our data returns
-+ Reset the submit button to its original condition
-+ You may need to use $q and setup some promises
-+ Inject $q into the directive not the link function
-+ remember scope.request === to the function on the controller.
-+ Don't let your controller function start until the "element" is "clicked"
-+ Make sure your controller function is returning itself and its promise.
-+ This will be difficult, don't give up. Tackle one problem at a time.
+<!-- + Hide, disable, or change the text of the submit button -->
+<!-- + Show a spinning icon or gif while we wait for our data -->
+<!-- + Hide the spinner when our data returns -->
+<!-- + Reset the submit button to its original condition -->
+<!-- + You may need to use $q and setup some promises -->
+<!-- + Inject $q into the directive not the link function -->
+<!-- + remember scope.request === to the function on the controller. -->
+<!-- + Don't let your controller function start until the "element" is "clicked" -->
+<!-- + Make sure your controller function is returning itself and its promise. -->
+<!-- + This will be difficult, don't give up. Tackle one problem at a time. -->
 
 ###Step 3
 
