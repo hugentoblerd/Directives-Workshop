@@ -20,7 +20,7 @@ app.directive('pending', function ($q) {
         })
       })
     }
-  }
+  };
 
 
 
